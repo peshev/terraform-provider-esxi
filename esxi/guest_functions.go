@@ -314,7 +314,7 @@ func updateVmx_contents(c *Config, vmid string, iscreate bool, memsize int, numv
 	log.Printf("[updateVmx_contents] New guest_name.vmx: %s\n", vmx_contents)
 
 	dst_vmx_file, err := getDst_vmx_file(c, vmid)
-	vmx_contents = strings.Replace(dst_vmx_file, "'", "\\'", -1)
+	dst_vmx_file = strings.Replace(dst_vmx_file, "'", "\\'", -1)
 
 	remote_cmd = fmt.Sprintf("echo \"%s\" > '%s'", vmx_contents, dst_vmx_file)
 	vmx_contents, err = runRemoteSshCommand(esxiSSHinfo, remote_cmd, "write guest_name.vmx file")
@@ -352,8 +352,9 @@ func cleanStorageFromVmx(c *Config, vmid string) error {
 	vmx_contents = strings.Replace(vmx_contents, "\"", "\\\"", -1)
 
 	dst_vmx_file, err := getDst_vmx_file(c, vmid)
+	dst_vmx_file = strings.Replace(dst_vmx_file, "'", "\\'", -1)
 
-	remote_cmd = fmt.Sprintf("echo \"%s\" | grep '[^[:blank:]]' >%s", vmx_contents, dst_vmx_file)
+	remote_cmd = fmt.Sprintf("echo \"%s\" | grep '[^[:blank:]]' > '%s'", vmx_contents, dst_vmx_file)
 	vmx_contents, err = runRemoteSshCommand(esxiSSHinfo, remote_cmd, "write guest_name.vmx file")
 
 	remote_cmd = fmt.Sprintf("vim-cmd vmsvc/reload %s", vmid)

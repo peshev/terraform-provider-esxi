@@ -149,8 +149,9 @@ func guestCREATE(c *Config, guest_name string, disk_store string,
 		log.Printf("[guestCREATE] New guest_name.vmx: %s\n", vmx_contents)
 
 		dst_vmx_file := fmt.Sprintf("%s/%s.vmx", fullPATH, guest_name)
+		dst_vmx_file = strings.Replace(dst_vmx_file, "'", "\\'", -1)
 
-		remote_cmd = fmt.Sprintf("echo \"%s\" >%s", vmx_contents, dst_vmx_file)
+		remote_cmd = fmt.Sprintf("echo \"%s\" > '%s'", vmx_contents, dst_vmx_file)
 		vmx_contents, err = runRemoteSshCommand(esxiSSHinfo, remote_cmd, "write guest_name.vmx file")
 
 		//  Create boot disk (vmdk)
