@@ -131,7 +131,11 @@ func updateVmx_contents(c *Config, vmid string, iscreate bool, memsize int, numv
 	if numvcpus != 0 {
 		re := regexp.MustCompile("numvcpus = \".*\"")
 		regexReplacement = fmt.Sprintf("numvcpus = \"%d\"", numvcpus)
-		vmx_contents = re.ReplaceAllString(vmx_contents, regexReplacement)
+		if re.FindAllString(vmx_contents) != nil {
+			vmx_contents = re.ReplaceAllString(vmx_contents, regexReplacement)
+		} else {
+			vmx_contents += "\n" + regexReplacement
+		}
 	}
 
 	// modify virthwver
