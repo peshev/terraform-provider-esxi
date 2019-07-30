@@ -131,7 +131,7 @@ func updateVmx_contents(c *Config, vmid string, iscreate bool, memsize int, numv
 	if numvcpus != 0 {
 		re := regexp.MustCompile("numvcpus = \".*\"")
 		regexReplacement = fmt.Sprintf("numvcpus = \"%d\"", numvcpus)
-		if re.FindAllString(vmx_contents) != nil {
+		if re.FindAllString(vmx_contents, -1) != nil {
 			vmx_contents = re.ReplaceAllString(vmx_contents, regexReplacement)
 		} else {
 			vmx_contents += "\n" + regexReplacement
